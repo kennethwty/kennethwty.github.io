@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+  <div class="clock">
+    <div class="clock-face">
+      <div class="hand hour-hand"></div>
+      <div class="hand min-hand"></div>
+      <div class="hand second-hand"></div>
+    </div>
+  </div>
+
+  <style>
+    html {
+      background: #f12711;  /* fallback for old browsers */
+      background: -webkit-linear-gradient(to right, #f5af19, #f12711);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to right, #f5af19, #f12711); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      background-size:cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 20px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width: 50%;
+      height: 6px;
+      background: black;
+      position: absolute;
+      top: 50%;
+      /* so that it doesn't spin in the middle of the hand */
+      transform-origin: 100%;
+      /* make it start at 12 instead of 9 */
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+    }
+  </style>
+
+  <script>
+    var secondHand = document.querySelector(".second-hand");
+    var minuteHand = document.querySelector(".min-hand");
+    var hourHand = document.querySelector(".hour-hand");
+
+    function setDate() {
+      var now = new Date();
+
+      // for the second hand
+      var seconds = now.getSeconds();
+      var secDegree = ((seconds / 60) * 360) + 90;
+      secondHand.style.transform = "rotate(" + secDegree + "deg)";
+      secondHand.style.background = "white";
+      secondHand.style.height = "1px";
+
+      // minute hand
+      var min = now.getMinutes();
+      var minDegree = ((min / 60) * 360) + ((seconds / 60) * 6) + 90;
+      minuteHand.style.transform = "rotate(" + minDegree + "deg)";
+
+      // hour hand
+      var hour = now.getHours();
+      var hourDegree = ((hour / 12) * 360) + ((min / 60) * 30) + 90;
+      hourHand.style.transform = "rotate(" + hourDegree + "deg)";
+    }
+
+    setInterval(setDate, 1000);
+  </script>
+</body>
+</html>
